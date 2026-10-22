@@ -1,0 +1,88 @@
+.overview {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 16px;
+}
+
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+/* ---------- about ---------- */
+
+.about .glow-card__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 28px;
+  padding: 26px 24px;
+}
+.about__main { display: grid; align-content: start; gap: 18px; }
+.about__main .btn { justify-self: start; }
+.about__text { color: var(--text-2); font-size: 14px; line-height: 1.75; }
+
+.about__goals {
+  display: grid;
+  align-content: center;
+  gap: 26px;
+  margin: 0;
+  padding: 4px 0 4px 26px;
+  border-left: 1px solid var(--line);
+  list-style: none;
+}
+.about__goals li { display: flex; gap: 14px; }
+.about__goal-icon {
+  flex: none;
+  color: #6ea8ff;
+  transition: transform 0.4s var(--ease-out), color 0.3s;
+}
+.about__goals li:hover .about__goal-icon { transform: rotate(-12deg) scale(1.12); color: #9ec5ff; }
+.about__goals b { display: block; font-weight: 600; font-size: 14.5px; }
+.about__goals li span span,
+.about__goals small { display: block; color: var(--muted); font-size: 13px; }
+
+/* ---------- quick links ---------- */
+
+.quick .glow-card__body { padding: 26px 18px 18px; }
+.quick__list {
+  display: grid;
+  gap: 10px;
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.quick__list a,
+.quick__list button {
+  display: grid;
+  grid-template-columns: 20px 1fr 16px;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: rgba(148, 163, 184, 0.04);
+  font-size: 14px;
+  text-align: left;
+  transition: background 0.25s, border-color 0.25s, transform 0.25s var(--ease-out);
+}
+.quick__list a:hover,
+.quick__list button:hover {
+  background: rgba(45, 212, 191, 0.08);
+  border-color: rgba(45, 212, 191, 0.35);
+  transform: translateX(3px);
+}
+.quick__list svg:last-child { color: var(--muted); transition: transform 0.25s var(--ease-out); }
+.quick__list a:hover svg:last-child,
+.quick__list button:hover svg:last-child { transform: translateX(3px); color: var(--text); }
+
+@media (max-width: 1100px) {
+  .overview { grid-template-columns: 1fr; }
+}
+@media (max-width: 720px) {
+  .about .glow-card__body { grid-template-columns: 1fr; }
+  .about__goals { border-left: 0; border-top: 1px solid var(--line); padding: 20px 0 0; }
+}
