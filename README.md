@@ -11,8 +11,10 @@ Everything runs in the browser: the file is parsed client-side and never sent to
 2. **Parse** — text is pulled out of the file and split into sections
    (Profile, Experience, Education, Skills, Projects, Achievements, Goals, Interests, Motto…).
 3. **Review** — the designer checks what was found and fixes anything before generating.
-4. **Dashboard** — stats, about, quick links, projects, journey, experience timeline, skills,
-   education, achievements and contact are rendered from the parsed data and saved to `localStorage`.
+4. **Dashboard** — the PureSolar layout only: profile header with quote, four stat cards, About Me
+   with goals, Quick Links, Projects carousel and the Solutions row (top skills). Saved to `localStorage`.
+   Sidebar links land on the matching card (Experience/Education/Achievements → stat cards,
+   Skills → Solutions row, Contact → Quick Links).
 
 ## Animations
 
@@ -22,7 +24,7 @@ Everything runs in the browser: the file is parsed client-side and never sent to
 | Decoding text | Education stat | `useScramble` — characters settle left to right |
 | Moving, lit borders | Every card | `GlowCard` — `@property --angle` animates a conic gradient masked to a 1px ring, plus a blurred halo copy |
 | Hover | Cards, chips, links | pointer-follow spotlight + 3D tilt (`usePointerGlow`, CSS vars only — no re-renders) |
-| Journey strip | “The path so far” | wavy connector with a travelling light; active step cycles and glows purple (pauses on hover) |
+| Solutions row | Skills for Every Need | wavy line with a travelling light; the highlighted skill walks along the row (pauses on hover) |
 | Headline shimmer, button sheen | Hero, CTAs | CSS gradient sweeps |
 | Parallax scene | Hero / upload | procedurally drawn SVG sunset + perspective solar farm, layers follow the pointer |
 
@@ -55,7 +57,7 @@ src/
   components/
     GlowCard.tsx          the moving-border card used everywhere
     scene/                SVG hero scene + project covers (no image assets)
-    …                     Sidebar, Topbar, Hero, StatCards, Overview, Projects, Journey, Sections
+    …                     Sidebar, Topbar, Hero, StatCards, Overview, Projects, Solutions
   data/sample-cv.txt      sample CV used by “Try it with a sample CV”
 ```
 

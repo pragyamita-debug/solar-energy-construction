@@ -60,17 +60,15 @@ export function QuickLinks({ resume, onViewResume }: QuickLinksProps) {
     { label: 'View Resume', icon: 'download', onClick: onViewResume },
     resume.links.linkedin && { label: 'LinkedIn Profile', icon: 'link' as IconName, href: resume.links.linkedin, external: true },
     resume.links.github && !resume.links.linkedin && { label: 'GitHub', icon: 'link' as IconName, href: resume.links.github, external: true },
-    resume.interests.length
-      ? { label: 'Research Interests', icon: 'bulb' as IconName, href: '#interests' }
-      : { label: 'Key Skills', icon: 'bulb' as IconName, href: '#skills' },
+    { label: resume.interests.length ? 'Research Interests' : 'Key Skills', icon: 'bulb' as IconName, href: '#skills' },
     resume.education.length ? { label: 'Education', icon: 'book' as IconName, href: '#education' } : null,
-    { label: 'Contact Me', icon: 'mail', href: resume.email ? `mailto:${resume.email}` : '#contact' },
+    resume.email ? { label: 'Contact Me', icon: 'mail' as IconName, href: `mailto:${resume.email}` } : null,
   ]
     .filter(Boolean)
     .slice(0, 4) as { label: string; icon: IconName; href?: string; onClick?: () => void; external?: boolean }[];
 
   return (
-    <GlowCard as="aside" className="quick" accent="teal" speed={8} phase={0.7} tilt={false} aria-label="Quick links">
+    <GlowCard as="aside" id="contact" className="quick" accent="teal" speed={8} phase={0.7} tilt={false} aria-label="Quick links">
       <h2 className="card-title">
         <Icon name="link" size={20} /> Quick Links
       </h2>

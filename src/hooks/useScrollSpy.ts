@@ -8,13 +8,25 @@ export function useScrollSpy(ids: string[], offset = 120) {
     let raf = 0;
     const update = () => {
       raf = 0;
+      // pick the section whose top has most recently passed the offset line,
+      // regardless of the order the ids are listed in
       let current = ids[0];
+      let best = -Infinity;
+      let lowest = { id: ids[0], top: -Infinity };
       for (const id of ids) {
         const el = document.getElementById(id);
-        if (el && el.getBoundingClientRect().top - offset <= 0) current = id;
+        if (!el) continue;
+        const top = el.getBoundingClientRect().top - offset;
+        // cards that share a row share a top; let the link the user clicked win the tie
+        const tie = Math.abs(top - best) < 2 && location.hash === `#${id}`;
+        if (top <= 0 && (top > best + 2 || tie)) {
+          best = Math.max(best, top);
+          current = id;
+        }
+        if (top > lowest.top) lowest = { id, top };
       }
-      // bottom of the page: highlight the last section
-      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) current = ids[ids.length - 1];
+      // bottom of the page: highlight the section lowest on the page
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) current = lowest.id;
       setActive(current);
     };
     const onScroll = () => {
@@ -23,9 +35,11 @@ export function useScrollSpy(ids: string[], offset = 120) {
     update();
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
+    window.addEventListener('hashchange', onScroll);
     return () => {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
+      window.removeEventListener('hashchange', onScroll);
       cancelAnimationFrame(raf);
     };
   }, [ids, offset]);

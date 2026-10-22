@@ -18,6 +18,9 @@ interface StatProps {
   suffix?: string;
 }
 
+// sidebar links land on these cards (the design has no separate Experience/Education/Achievements sections)
+const ANCHORS = ['experience', 'education', 'achievements', undefined];
+
 const R = 25;
 const CIRC = 2 * Math.PI * R;
 
@@ -29,7 +32,7 @@ function Stat({ icon, accent, label, sub, index, run, value, suffix = '' }: Stat
   const progress = numeric ? (value ? count / value : run ? 1 : 0) : text === value ? 1 : text.length / Math.max(1, value.length) * 0.6;
 
   return (
-    <GlowCard accent={accent} phase={index * 0.23} speed={6.5 + index * 0.6} className="stat">
+    <GlowCard id={ANCHORS[index]} accent={accent} phase={index * 0.23} speed={6.5 + index * 0.6} className="stat">
       <div className="stat__badge">
         <svg viewBox="0 0 60 60" aria-hidden>
           <circle className="stat__track" cx="30" cy="30" r={R} />

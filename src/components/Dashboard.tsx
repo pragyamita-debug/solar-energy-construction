@@ -2,11 +2,10 @@ import { useState } from 'react';
 import { useScrollSpy } from '../hooks/useScrollSpy';
 import type { StoredProfile } from '../lib/types';
 import { Hero } from './Hero';
-import { Journey } from './Journey';
 import { AboutCard, QuickLinks } from './Overview';
 import { Projects } from './Projects';
-import { ContactSection, EducationAchievements, ExperienceSection, SkillsSection } from './Sections';
 import { NAV, Sidebar } from './Sidebar';
+import { Solutions } from './Solutions';
 import { StatCards } from './StatCards';
 import { Topbar } from './Topbar';
 import './Dashboard.css';
@@ -53,11 +52,7 @@ export function Dashboard({ profile, onUploadNew, onEdit, onPhoto, onReset, onDo
             <QuickLinks resume={resume} onViewResume={onDownloadCv} />
           </div>
           <Projects projects={resume.projects} />
-          <Journey resume={resume} />
-          <ExperienceSection resume={resume} />
-          <SkillsSection resume={resume} />
-          <EducationAchievements resume={resume} />
-          <ContactSection resume={resume} />
+          <Solutions resume={resume} />
           <footer className="footer">
             <span>© {new Date().getFullYear()} {resume.name}</span>
             <span>Generated from a CV · PureSolar</span>
