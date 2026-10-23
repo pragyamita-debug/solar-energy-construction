@@ -1,3 +1,4 @@
+import photo from '../assets/photos/profile.jpg';
 import type { Resume } from '../lib/types';
 
 /**
@@ -17,6 +18,15 @@ export const profile: Resume = {
   summary:
     'I am a consultant currently working with Excelerate, focused on building impactful solutions through data, partnerships and innovation. I am preparing for UGC NET to clear JRF and pursue my PhD with a job. My research interests lie at the intersection of Hindu religion, microeconomics and mythology.',
   motto: 'Big dreams, strategic plans, consistent action.',
+  photo,
+  cvUrl: `${import.meta.env.BASE_URL}Pragyamita-Saha-CV.pdf`,
+
+  quickLinks: [
+    { label: 'View Resume', icon: 'download', href: `${import.meta.env.BASE_URL}Pragyamita-Saha-CV.pdf` },
+    { label: 'UGC NET Study Plan', icon: 'book', href: '#about' },
+    { label: 'Research Interests', icon: 'bulb', href: '#skills' },
+    { label: 'Contact Me', icon: 'mail', href: 'mailto:pragyamitasaha@gmail.com' },
+  ],
 
   stats: {
     years: 2,

@@ -26,8 +26,18 @@ export interface Education {
 
 export interface Project {
   title: string;
+  /** Small line under the title, e.g. a place or client; falls back to the tags */
+  meta?: string;
   description: string;
   tags: string[];
+  /** Cover photo (imported image or URL). Projects without one reuse the built-in photos. */
+  image?: string;
+}
+
+export interface QuickLink {
+  label: string;
+  href: string;
+  icon: 'download' | 'book' | 'bulb' | 'mail' | 'link' | 'target';
 }
 
 export interface Goal {
@@ -45,8 +55,11 @@ export interface Resume {
   location?: string;
   links: Links;
   summary: string;
-  /** Optional photo for the About section — a URL or a file in /public */
+  /** Profile photo shown in the header and the top bar */
   photo?: string;
+  /** Link for “Download My CV” / “View Resume” */
+  cvUrl?: string;
+  quickLinks: QuickLink[];
   motto?: string;
   experience: Experience[];
   education: Education[];
