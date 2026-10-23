@@ -4,7 +4,18 @@ Upload a CV (PDF, DOCX or TXT) and get an animated portfolio in a green, renewab
 (dark forest background, leaf-green accents, daylight wind-and-solar scenes).
 Everything runs in the browser: the file is parsed client-side and never sent to a server.
 
-![flow](https://img.shields.io/badge/flow-upload%20→%20review%20→%20dashboard-3b82f6)
+**Live site:** https://pragyamita-debug.github.io/solar-energy-construction/ (after Pages is switched on — see below)
+
+## Use this template
+
+1. On GitHub, click **Use this template → Create a new repository** (or fork / download the ZIP).
+2. In the new repo go to **Settings → Pages → Build and deployment → Source** and pick **GitHub Actions**.
+3. Push to `main` (or open **Actions → Deploy to GitHub Pages → Run workflow**). The site goes live at
+   `https://<your-user>.github.io/<repo-name>/`.
+4. Open the site and upload a CV — or replace `src/data/sample-cv.txt` with your own so the
+   “Try it with a sample CV” button shows your details.
+
+To restyle, change the colour tokens at the top of `src/styles/global.css` (`--accent`, `--bg`, …).
 
 ## How it works
 
