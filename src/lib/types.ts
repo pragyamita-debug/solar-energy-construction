@@ -1,3 +1,5 @@
+import type { IconName } from '../components/Icon';
+
 export interface Links {
   linkedin?: string;
   github?: string;
@@ -34,10 +36,16 @@ export interface Project {
   image?: string;
 }
 
+export interface SolutionItem {
+  title: string;
+  text: string;
+  icon: IconName;
+}
+
 export interface QuickLink {
   label: string;
   href: string;
-  icon: 'download' | 'book' | 'bulb' | 'mail' | 'link' | 'target';
+  icon: IconName;
 }
 
 export interface Goal {
@@ -60,6 +68,8 @@ export interface Resume {
   /** Link for “Download My CV” / “View Resume” */
   cvUrl?: string;
   quickLinks: QuickLink[];
+  /** The row at the bottom of the page */
+  solutions: { eyebrow: string; title: string; subtitle?: string; items: SolutionItem[] };
   motto?: string;
   experience: Experience[];
   education: Education[];

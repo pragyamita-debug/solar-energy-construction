@@ -14,10 +14,10 @@ Nothing else needs editing.
 
 - `stats` drives the counting numbers on the four stat cards.
 - `motto` is the quote card in the header.
-- `photo` is the profile picture (header and top bar). Replace `src/assets/photos/profile.jpg`.
-- `quickLinks` fills the Quick Links card; `cvUrl` is the “Download My CV” file (`public/Pragyamita-Saha-CV.pdf`).
+- `photo` is the profile picture (header and top bar). Add your image to `src/assets/photos/`, import it in `profile.ts` and set `photo`; without one, your initials are shown.
+- `quickLinks` fills the Quick Links card; `cvUrl` is the “Download My CV” file — replace `public/sample-cv.pdf` with your own.
 - `goals` show beside About Me and in the bell menu.
-- The first four `skills` fill the Solutions row; `interests` become its subtitle.
+- `solutions` fills the bottom row (title, subtitle and four items with icons).
 - Projects use the photos in `src/assets/photos/` in turn; give a project its own `image` to override.
 
 ### Photos
@@ -51,7 +51,7 @@ cards → About Me with goals + Quick Links → Projects → Solutions.
 | Decoding text | Education card | `useScramble` — characters settle left to right |
 | Moving, lit borders | Every card | `GlowCard` — `@property --angle` animates a conic gradient masked to a 1px ring, plus a blurred halo |
 | Hover | Cards, links | pointer-follow spotlight + 3D tilt (`usePointerGlow`) |
-| Solutions row | Skills | a light runs along the line and the highlight walks from skill to skill |
+| Solutions row | Bottom of the page | a light runs along the line and the highlight walks from item to item |
 | Parallax + slow zoom | Header photo | the photo drifts with the pointer and zooms gently |
 
 All motion respects `prefers-reduced-motion`.
@@ -70,7 +70,7 @@ npm run build:single # one self-contained index.html in dist-single/
 ```
 src/
   data/profile.ts         ← all page content
-  assets/photos/          header, profile, project and solutions photos
+  assets/photos/          header, project and solutions photos
   App.tsx                 renders the dashboard from profile.ts
   lib/types.ts            the shape of profile.ts
   hooks/                  useCountUp, useScramble, useInView, usePointerGlow, useScrollSpy
@@ -80,9 +80,9 @@ src/
     StatCards.tsx         counting stat cards
     Overview.tsx          About Me + Quick Links
     Projects.tsx          project carousel
-    Solutions.tsx         skills row + sun photo
+    Solutions.tsx         solutions row + sun photo
     GlowCard.tsx          the moving-border card used everywhere
   styles/global.css       colour tokens, buttons, shared styles
 public/
-  Pragyamita-Saha-CV.pdf  the CV behind “Download My CV”
+  sample-cv.pdf           placeholder CV behind “Download My CV”
 ```

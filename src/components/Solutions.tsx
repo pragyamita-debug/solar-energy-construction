@@ -1,32 +1,14 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import type { Resume } from '../lib/types';
-import { Icon, type IconName } from './Icon';
+import { Icon } from './Icon';
 import { Reveal } from './Reveal';
 import sunPhoto from '../assets/photos/solutions-sun.jpg';
 import './Solutions.css';
 
-const ICONS: IconName[] = ['target', 'layers', 'bulb', 'rocket'];
-
-/** Where a skill shows up in the CV, so each item carries a real second line. */
-function evidence(skill: string, r: Resume) {
-  const s = skill.toLowerCase();
-  const project = r.projects.find((p) => p.tags.some((t) => t.toLowerCase() === s) || `${p.title} ${p.description}`.toLowerCase().includes(s));
-  if (project) return `Used in ${project.title}`;
-  const job = r.experience.find((e) => e.bullets.join(' ').toLowerCase().includes(s));
-  if (job) return `Used at ${job.company || job.role}`;
-  return 'Core skill';
-}
-
-function listText(items: string[]) {
-  return items.length > 1 ? `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}` : items[0];
-}
-
 export function Solutions({ resume }: { resume: Resume }) {
-  const items = useMemo(
-    () => resume.skills.slice(0, 4).map((name, i) => ({ name, sub: evidence(name, resume), icon: ICONS[i] })),
-    [resume],
-  );
+  const { solutions } = resume;
+  const items = solutions.items.slice(0, 4).map((it) => ({ name: it.title, sub: it.text, icon: it.icon }));
   const reduced = useReducedMotion();
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -38,19 +20,15 @@ export function Solutions({ resume }: { resume: Resume }) {
     return () => clearInterval(t);
   }, [reduced, paused, items.length]);
 
-  const sub = resume.interests.length
-    ? `Research interests: ${listText(resume.interests)}.`
-    : 'The core skills behind my work, and where I have used them.';
-
   return (
     <section id="skills" className="panel solutions" aria-labelledby="solutions-title">
       <div className="solutions__main">
         <Reveal>
-          <span className="eyebrow">Solutions</span>
+          <span className="eyebrow">{solutions.eyebrow}</span>
           <h2 id="solutions-title" className="section-title">
-            Skills for Every Need
+            {solutions.title}
           </h2>
-          <p className="section-sub">{sub}</p>
+          {solutions.subtitle && <p className="section-sub">{solutions.subtitle}</p>}
         </Reveal>
 
         {items.length > 0 ? (
@@ -74,7 +52,7 @@ export function Solutions({ resume }: { resume: Resume }) {
             </ul>
           </div>
         ) : (
-          <p className="empty">Add a “Skills” heading to the CV and the top four show up here.</p>
+          <p className="empty">Add items to `solutions.items` in src/data/profile.ts.</p>
         )}
       </div>
 
