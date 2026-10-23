@@ -1,155 +1,161 @@
 import { useId, useMemo } from 'react';
-import { solarField, ridge, type Camera } from './geometry';
-import { HeroScene } from './HeroScene';
+import { ridge, solarField, type Camera } from './geometry';
+import { GreenScene } from './GreenScene';
 
-type Pt = [number, number];
-
-/** Splits a quad (bl, br, tr, tl) into a cols × rows grid of panel polygons. */
-function quadGrid([bl, br, tr, tl]: Pt[], cols: number, rows: number, gap = 0.06) {
-  const at = (u: number, v: number): Pt => {
-    const bx = bl[0] + (br[0] - bl[0]) * u;
-    const by = bl[1] + (br[1] - bl[1]) * u;
-    const tx = tl[0] + (tr[0] - tl[0]) * u;
-    const ty = tl[1] + (tr[1] - tl[1]) * u;
-    return [bx + (tx - bx) * v, by + (ty - by) * v];
-  };
-  const out: string[] = [];
-  for (let c = 0; c < cols; c++) {
-    for (let r = 0; r < rows; r++) {
-      const u0 = (c + gap) / cols;
-      const u1 = (c + 1 - gap) / cols;
-      const v0 = (r + gap) / rows;
-      const v1 = (r + 1 - gap) / rows;
-      out.push([at(u0, v0), at(u1, v0), at(u1, v1), at(u0, v1)].map((p) => p.map((n) => n.toFixed(1)).join(',')).join(' '));
-    }
-  }
-  return out;
-}
-
-function House() {
+/** Mountain valley with a dam and an animated waterfall. */
+function Hydro() {
   const uid = useId().replace(/:/g, '');
   const id = (n: string) => `${uid}-${n}`;
-  const panels = useMemo(
-    () => [
-      ...quadGrid([[132, 112], [222, 112], [208, 78], [146, 78]], 5, 3),
-      ...quadGrid([[238, 120], [300, 120], [286, 96], [252, 96]], 3, 2),
-    ],
-    [],
-  );
+  const hills = useMemo(() => [ridge(400, 260, 120, 70, 1.7, 5), ridge(400, 260, 150, 60, 4.4, 4)], []);
   return (
-    <svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice" aria-hidden>
+    <svg viewBox="0 0 400 260" preserveAspectRatio="xMidYMid slice" aria-hidden>
       <defs>
         <linearGradient id={id('sky')} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#3f86d8" />
-          <stop offset="1" stopColor="#cfe7f7" />
+          <stop offset="0" stopColor="#7fb6e6" />
+          <stop offset="1" stopColor="#d9ecf7" />
         </linearGradient>
-        <linearGradient id={id('pv')} x1="0" y1="1" x2="0" y2="0">
-          <stop offset="0" stopColor="#0e2a5c" />
-          <stop offset="1" stopColor="#4f7cc9" />
+        <linearGradient id={id('water')} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#ffffff" />
+          <stop offset="1" stopColor="#bfe3f2" />
+        </linearGradient>
+        <linearGradient id={id('dam')} x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stopColor="#8d9590" />
+          <stop offset="0.5" stopColor="#c5ccc7" />
+          <stop offset="1" stopColor="#7c847f" />
         </linearGradient>
       </defs>
-      <rect width="400" height="200" fill={`url(#${id('sky')})`} />
-      <circle cx="340" cy="34" r="16" fill="#fff8e0" opacity="0.95" />
-      <ellipse cx="90" cy="40" rx="50" ry="8" fill="#fff" opacity="0.55" />
-      <ellipse cx="250" cy="28" rx="40" ry="6" fill="#fff" opacity="0.5" />
-      {/* trees behind */}
-      <g fill="#2f6b3a">
-        <circle cx="40" cy="120" r="34" />
-        <circle cx="72" cy="104" r="28" />
-        <circle cx="352" cy="112" r="34" />
-        <circle cx="384" cy="126" r="26" />
-      </g>
-      <rect y="150" width="400" height="50" fill="#5d9a45" />
-      <rect y="150" width="400" height="6" fill="#4b8338" />
-      {/* house body */}
-      <rect x="128" y="112" width="182" height="44" fill="#efe4d2" />
-      <rect x="128" y="112" width="182" height="5" fill="#d4c4ab" />
-      {/* roofs */}
-      <polygon points="120,114 232,114 214,72 140,72" fill="#3a3f48" />
-      <polygon points="230,122 310,122 292,92 248,92" fill="#444a54" />
-      <g fill={`url(#${id('pv')})`} stroke="#b9cff0" strokeWidth="0.5" strokeOpacity="0.7">
-        {panels.map((p, i) => (
-          <polygon key={i} points={p} />
+      <rect width="400" height="260" fill={`url(#${id('sky')})`} />
+      <ellipse cx="90" cy="40" rx="60" ry="12" fill="#fff" opacity="0.7" />
+      <ellipse cx="300" cy="30" rx="70" ry="10" fill="#fff" opacity="0.6" />
+      <path d={hills[0]} fill="#4f7d58" />
+      <path d={hills[1]} fill="#2f5f37" />
+      {/* forested slopes */}
+      <path d="M0 260 L0 120 C 60 110, 110 120, 140 150 L 150 260 Z" fill="#285a2e" />
+      <path d="M400 260 L400 110 C 340 105, 290 120, 260 150 L 250 260 Z" fill="#23522a" />
+      <g fill="#1d4723">
+        {Array.from({ length: 22 }, (_, i) => (
+          <circle key={i} cx={i < 11 ? 8 + i * 12 : 262 + (i - 11) * 13} cy={i < 11 ? 128 + i * 2.6 : 152 - (i - 11) * 3} r={9} />
         ))}
       </g>
-      {/* windows & door */}
-      <g fill="#2a3a52" stroke="#fff" strokeWidth="1.5">
-        <rect x="142" y="124" width="22" height="18" />
-        <rect x="174" y="124" width="22" height="18" />
-        <rect x="246" y="128" width="20" height="16" />
-        <rect x="276" y="128" width="20" height="16" />
-      </g>
-      <rect x="208" y="124" width="18" height="32" fill="#6b4a33" />
-      {/* hedge */}
-      <g fill="#3f7d33">
-        {Array.from({ length: 14 }, (_, i) => (
-          <circle key={i} cx={104 + i * 16} cy={160} r={9} />
+      {/* dam wall */}
+      <polygon points="138,112 262,112 252,170 148,170" fill={`url(#${id('dam')})`} />
+      <rect x="136" y="106" width="128" height="8" fill="#e3e8e5" />
+      <g fill="#6f7873">
+        {[156, 182, 208, 234].map((x) => (
+          <rect key={x} x={x} y="114" width="8" height="10" />
         ))}
       </g>
-      <polygon points="200,200 214,156 222,156 236,200" fill="#cbbfae" opacity="0.8" />
+      {/* waterfall */}
+      <g className="falls">
+        {[170, 186, 200, 214, 228].map((x, i) => (
+          <rect key={x} x={x} y="122" width="10" height="70" fill={`url(#${id('water')})`} opacity={0.75 + (i % 2) * 0.2} style={{ animationDelay: `${i * 0.2}s` }} />
+        ))}
+      </g>
+      <ellipse cx="200" cy="196" rx="70" ry="14" fill="#f4fbff" opacity="0.85" />
+      <path d="M120 260 C 160 210, 240 210, 290 260 Z" fill="#5e98b8" />
+      <path d="M150 260 C 180 225, 230 225, 260 260 Z" fill="#7fb6d3" opacity="0.7" />
     </svg>
   );
 }
 
-function Commercial() {
+/** Close-up of panel rows under a clear noon sky. */
+function SolarRows() {
   const uid = useId().replace(/:/g, '');
   const id = (n: string) => `${uid}-${n}`;
-  const { panels, skyline } = useMemo(() => {
-    const cam: Camera = { cx: 120, horizon: 30, height: 10, focal: 120, yaw: -0.35, pivotX: 0, pivotZ: 6 };
-    return {
-      panels: solarField(cam, {
-        rows: Array.from({ length: 14 }, (_, i) => 2.5 + i * 1.5),
-        xFrom: -8,
-        xTo: 40,
-        rise: 0.5,
-        depth: 1.1,
-        base: 0.3,
-        cols: 4,
-        viewWidth: 400,
-      }),
-      skyline: ridge(400, 60, 34, 14, 3.3, 5),
-    };
+  const panels = useMemo(() => {
+    const cam: Camera = { cx: 120, horizon: 120, height: 3.2, focal: 150, yaw: 0.35, pivotX: 0, pivotZ: 0 };
+    return solarField(cam, { rows: [2.2, 4.2, 6.2, 8.2, 10.2, 12.2, 14.2], xFrom: 0, xTo: 40, rise: 1.2, depth: 1, base: 0.5, cols: 4, viewWidth: 400 });
   }, []);
   return (
-    <svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice" aria-hidden>
+    <svg viewBox="0 0 400 260" preserveAspectRatio="xMidYMid slice" aria-hidden>
       <defs>
         <linearGradient id={id('sky')} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#5f97d6" />
-          <stop offset="1" stopColor="#d6e3ee" />
-        </linearGradient>
-        <linearGradient id={id('roof')} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#9aa3b2" />
-          <stop offset="1" stopColor="#5d6878" />
+          <stop offset="0" stopColor="#3f8fdc" />
+          <stop offset="1" stopColor="#cfe6f6" />
         </linearGradient>
         <linearGradient id={id('pv')} x1="0" y1="1" x2="0" y2="0">
-          <stop offset="0" stopColor="#0c2350" />
-          <stop offset="1" stopColor="#4a74c0" />
+          <stop offset="0" stopColor="#0f2f63" />
+          <stop offset="1" stopColor="#5d8fd6" />
         </linearGradient>
       </defs>
-      <rect width="400" height="200" fill={`url(#${id('sky')})`} />
-      <path d={skyline} fill="#8796ab" opacity="0.7" />
-      <g fill="#7d8aa0" opacity="0.8">
-        <rect x="250" y="8" width="20" height="30" />
-        <rect x="276" y="16" width="14" height="22" />
-        <rect x="300" y="4" width="18" height="34" />
+      <rect width="400" height="260" fill={`url(#${id('sky')})`} />
+      <ellipse cx="300" cy="44" rx="80" ry="16" fill="#fff" opacity="0.85" />
+      <ellipse cx="80" cy="70" rx="60" ry="10" fill="#fff" opacity="0.7" />
+      <rect y="118" width="400" height="142" fill="#6c9a4e" />
+      <rect y="118" width="400" height="6" fill="#86ad62" />
+      <g stroke="#2b3a2f" strokeWidth="1">
+        {panels.map((p, i) => p.legs && <path key={i} d={p.legs} />)}
       </g>
-      <polygon points="-10,38 410,30 410,200 -10,200" fill={`url(#${id('roof')})`} />
-      <g fill={`url(#${id('pv')})`} stroke="#c6d6f2" strokeWidth="0.45" strokeOpacity="0.8">
+      <g fill={`url(#${id('pv')})`} stroke="#e1ecfa" strokeWidth="0.7" strokeOpacity="0.85">
         {panels.map((p, i) => (
           <polygon key={i} points={p.poly} />
         ))}
       </g>
-      <g stroke="#dfe8f8" strokeOpacity="0.25" strokeWidth="0.35" fill="none">
+      <g stroke="#e8f1fd" strokeOpacity="0.35" strokeWidth="0.5" fill="none">
         {panels.map((p, i) => (
           <path key={i} d={p.cells} />
         ))}
       </g>
-      <polygon points="300,200 400,150 400,200" fill="#6b7685" />
     </svg>
   );
 }
 
-const VARIANTS = [House, Commercial, () => <HeroScene sunX={980} />];
+/** A seedling in soil against soft green bokeh. */
+function Sprout() {
+  const uid = useId().replace(/:/g, '');
+  const id = (n: string) => `${uid}-${n}`;
+  return (
+    <svg viewBox="0 0 400 260" preserveAspectRatio="xMidYMid slice" aria-hidden>
+      <defs>
+        <radialGradient id={id('bg')} cx="0.6" cy="0.3" r="0.9">
+          <stop offset="0" stopColor="#a9cf7a" />
+          <stop offset="0.5" stopColor="#4f7f36" />
+          <stop offset="1" stopColor="#1f3a1c" />
+        </radialGradient>
+        <linearGradient id={id('soil')} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#5a3b22" />
+          <stop offset="1" stopColor="#2c1a0e" />
+        </linearGradient>
+        <linearGradient id={id('leaf')} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#8fd65d" />
+          <stop offset="1" stopColor="#3a8a2c" />
+        </linearGradient>
+        <filter id={id('bokeh')}>
+          <feGaussianBlur stdDeviation="6" />
+        </filter>
+      </defs>
+      <rect width="400" height="260" fill={`url(#${id('bg')})`} />
+      <g filter={`url(#${id('bokeh')})`} fill="#e8f7c8">
+        {[
+          [60, 50, 18, 0.35],
+          [330, 40, 24, 0.4],
+          [280, 110, 12, 0.3],
+          [120, 120, 14, 0.25],
+          [360, 160, 16, 0.25],
+        ].map(([x, y, r, o], i) => (
+          <circle key={i} cx={x} cy={y} r={r} opacity={o} />
+        ))}
+      </g>
+      {/* hands-cupped soil mound */}
+      <path d="M70 260 C 90 200, 150 180, 200 180 C 260 180, 320 200, 340 260 Z" fill={`url(#${id('soil')})`} />
+      <g fill="#6b4a2d" opacity="0.7">
+        {Array.from({ length: 18 }, (_, i) => (
+          <circle key={i} cx={110 + ((i * 47) % 190)} cy={196 + ((i * 13) % 50)} r={2 + (i % 3)} />
+        ))}
+      </g>
+      <g className="sprout">
+        <path d="M200 186 C 200 160, 198 140, 202 112" stroke="#4c8f34" strokeWidth="5" fill="none" strokeLinecap="round" />
+        <path d="M202 140 C 170 140, 140 120, 128 92 C 160 90, 192 108, 202 140 Z" fill={`url(#${id('leaf')})`} />
+        <path d="M202 120 C 230 118, 262 96, 272 66 C 238 66, 208 88, 202 120 Z" fill={`url(#${id('leaf')})`} />
+        <path d="M202 112 C 196 96, 200 80, 210 70 C 216 84, 212 100, 202 112 Z" fill="#9fe06c" />
+        <path d="M140 96 C 165 108, 185 122, 200 138" stroke="#2f6f24" strokeWidth="1.2" fill="none" opacity="0.6" />
+        <path d="M268 70 C 245 85, 222 102, 204 118" stroke="#2f6f24" strokeWidth="1.2" fill="none" opacity="0.6" />
+      </g>
+    </svg>
+  );
+}
+
+const VARIANTS = [() => <GreenScene sunX={1100} />, Hydro, SolarRows, Sprout];
 
 export function ProjectCover({ index }: { index: number }) {
   const Variant = VARIANTS[index % VARIANTS.length];

@@ -3,7 +3,7 @@ import { ACCEPTED } from '../lib/extractText';
 import { GlowCard } from './GlowCard';
 import { Icon } from './Icon';
 import { Logo } from './Logo';
-import { HeroScene } from './scene/HeroScene';
+import { GreenScene } from './scene/GreenScene';
 import './UploadScreen.css';
 
 export const PROCESS_STEPS = ['Reading your file', 'Finding the sections', 'Counting experience & skills', 'Building your dashboard'];
@@ -32,7 +32,7 @@ export function UploadScreen({ busy, step, error, onFile, onSample, onDownloadSa
   return (
     <div className="upload">
       <div className="upload__scene" aria-hidden>
-        <HeroScene sunX={900} />
+        <GreenScene />
       </div>
 
       <header className="upload__top">
@@ -58,7 +58,7 @@ export function UploadScreen({ busy, step, error, onFile, onSample, onDownloadSa
 
         <GlowCard
           className={`upload__drop ${dragging ? 'is-dragging' : ''}`}
-          accent={dragging ? 'teal' : 'blue'}
+          accent={dragging ? 'teal' : 'green'}
           speed={5}
           tilt={false}
           active={dragging || busy}

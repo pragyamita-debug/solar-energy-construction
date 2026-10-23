@@ -4,13 +4,13 @@
   padding: 0;
   border: 1px solid var(--line-strong);
   border-radius: 18px;
-  background: linear-gradient(170deg, #142037, #0c1426);
+  background: linear-gradient(170deg, #132a22, #0b1814);
   color: var(--text);
-  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(92, 191, 85, 0.1);
   animation: pop 0.45s var(--ease-out);
 }
 .review::backdrop {
-  background: rgba(5, 9, 18, 0.7);
+  background: rgba(4, 10, 8, 0.7);
   backdrop-filter: blur(6px);
 }
 @keyframes pop {
@@ -52,15 +52,15 @@
   padding: 10px 12px;
   border-radius: 10px;
   border: 1px solid var(--line-strong);
-  background: rgba(5, 10, 20, 0.55);
+  background: rgba(4, 10, 8, 0.55);
   resize: vertical;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 .review__grid input:focus,
 .review__grid textarea:focus {
   outline: none;
-  border-color: var(--blue);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(92, 191, 85, 0.2);
 }
 
 .review__foot {
@@ -70,5 +70,5 @@
   justify-content: flex-end;
   gap: 10px;
   padding: 16px 24px 20px;
-  background: linear-gradient(180deg, transparent, #0c1426 35%);
+  background: linear-gradient(180deg, transparent, #0b1814 35%);
 }

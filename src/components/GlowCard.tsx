@@ -28,7 +28,7 @@ export function GlowCard({
   children,
   as: Tag = 'div',
   className = '',
-  accent = 'blue',
+  accent = 'green',
   speed = 7,
   phase = 0,
   tilt = true,
