@@ -181,7 +181,8 @@ export function ExperienceSection({ resume }: { resume: Resume }) {
 
 /* ---------------- About ---------------- */
 
-export function AboutSection({ resume, photo }: { resume: Resume; photo?: string }) {
+export function AboutSection({ resume }: { resume: Resume }) {
+  const { photo } = resume;
   return (
     <section id="about" className="section" aria-labelledby="about-title">
       <div className="wrap about">

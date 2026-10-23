@@ -1,32 +1,34 @@
-# PureSolar — CV → Portfolio
+# PureSolar Portfolio
 
-Upload a CV (PDF, DOCX or TXT) and get an animated portfolio in a green, renewable-energy theme
-(dark forest background, leaf-green accents, daylight wind-and-solar scenes).
-Everything runs in the browser: the file is parsed client-side and never sent to a server.
+An animated portfolio dashboard in a green, renewable-energy theme: dark forest background,
+leaf-green accents and daylight wind-and-solar scenes drawn in SVG (no image files to host).
 
 **Live site:** https://pragyamita-debug.github.io/solar-energy-construction/ (after Pages is switched on — see below)
+
+## Make it yours
+
+All content lives in one file: **`src/data/profile.ts`**. Change the name, headline, summary,
+stats, projects, skills, experience, education, goals and links there and the page updates.
+Nothing else needs editing.
+
+- `stats` drives the counting numbers in the strip under the hero.
+- `motto` becomes the About heading; leave it out to use “Let’s build something meaningful”.
+- `photo` (optional) replaces the About illustration — put the image in `public/` and set `photo: 'me.jpg'`.
+- The first six `skills` go in the skills strip; the rest (and `interests`) show as chips.
+
+To restyle, change the colour tokens at the top of `src/styles/global.css` (`--accent`, `--bg`, …).
 
 ## Use this template
 
 1. On GitHub, click **Use this template → Create a new repository** (or fork / download the ZIP).
 2. In the new repo go to **Settings → Pages → Build and deployment → Source** and pick **GitHub Actions**.
-3. Push to `main` (or open **Actions → Deploy to GitHub Pages → Run workflow**). The site goes live at
-   `https://<your-user>.github.io/<repo-name>/`.
-4. Open the site and upload a CV — or replace `src/data/sample-cv.txt` with your own so the
-   “Try it with a sample CV” button shows your details.
+3. Edit `src/data/profile.ts` and push to `main` (or open **Actions → Deploy to GitHub Pages → Run workflow**).
+   The site goes live at `https://<your-user>.github.io/<repo-name>/`.
 
-To restyle, change the colour tokens at the top of `src/styles/global.css` (`--accent`, `--bg`, …).
+## Sections
 
-## How it works
-
-1. **Upload** — drag a CV onto the drop zone (or try the bundled sample).
-2. **Parse** — text is pulled out of the file and split into sections
-   (Profile, Experience, Education, Skills, Projects, Achievements, Goals, Interests, Motto…).
-3. **Review** — the designer checks what was found and fixes anything before generating.
-4. **Portfolio** — top navigation (Home, Projects, Skills, Experience, About), hero with
-   “Hi, I’m …” and the role in green, a counting stat strip, light project cards, a skills strip,
-   Experience & Education cards and an About section with goals. Saved to `localStorage`.
-   The gear button in the nav uploads a new CV, edits details, adds a photo or downloads the CV.
+Top navigation (Home, Projects, Skills, Experience, About) → hero with “Hi, I’m …” and the role in
+green → stat strip → project cards → skills strip → Experience & Education → About with goals → footer.
 
 ## Animations
 
@@ -39,7 +41,7 @@ To restyle, change the colour tokens at the top of `src/styles/global.css` (`--a
 | Spinning turbines, waterfall, swaying sprout | Hero, project covers | SVG scenes animated with CSS |
 | Timeline light | Experience card | a light runs down the timeline; the current role pulses |
 | Role shimmer, button sheen | Hero, buttons | CSS gradient sweeps |
-| Parallax scene | Hero / upload | procedurally drawn golden-hour valley, wind turbines and a perspective solar farm; layers follow the pointer |
+| Parallax scene | Hero | golden-hour valley, wind turbines and a perspective solar farm; layers follow the pointer |
 
 All motion respects `prefers-reduced-motion`.
 
@@ -48,36 +50,23 @@ All motion respects `prefers-reduced-motion`.
 ```bash
 npm install
 npm run dev          # local dev server
-npm test             # parser unit tests (vitest)
 npm run build        # static build in dist/
 npm run build:single # one self-contained index.html in dist-single/
 ```
-
-Pushing to `main` deploys to GitHub Pages via `.github/workflows/deploy.yml`
-(enable **Settings → Pages → Source: GitHub Actions** once).
 
 ## Project structure
 
 ```
 src/
-  App.tsx                 stage machine: upload → processing → review → dashboard
-  lib/
-    extractText.ts        PDF (pdf.js, lazy-loaded) / DOCX (mammoth) / TXT → text
-    parseResume.ts        text → Resume (sections, roles, dates, degrees, skills…)
-    dates.ts              date-range parsing and overlap-aware experience totals
-    storage.ts            safe localStorage wrapper
+  data/profile.ts         ← all page content
+  App.tsx                 renders the dashboard from profile.ts
+  lib/types.ts            the shape of profile.ts
   hooks/                  useCountUp, useScramble, useInView, usePointerGlow, useScrollSpy
   components/
+    NavBar.tsx            sticky top navigation with scroll-spy underline
+    Hero.tsx              hero + counting stat strip
+    Sections.tsx          projects, skills, experience & education, about, footer
     GlowCard.tsx          the moving-border card used everywhere
-    scene/                GreenScene (hero) + ProjectCover variants — drawn in SVG, no image assets
-    …                     NavBar, Hero (+ stat strip), Sections (projects, skills, experience, about)
-  data/sample-cv.txt      sample CV used by “Try it with a sample CV”
+    scene/                GreenScene (hero) + ProjectCover variants — drawn in SVG
+  styles/global.css       colour tokens, buttons, shared styles
 ```
-
-## Writing a CV that parses well
-
-- Use clear headings: **Experience**, **Education**, **Skills**, **Projects**, **Achievements**.
-- Put dates on the role line or the line after it: `Jan 2023 – Present`, `03/2021 - 06/2023`, `2019 - 2022`.
-- Optional extras the dashboard understands: **Goals** (`Goal: …`, `Next Step: …`), **Motto**, **Research Interests**, **Languages**.
-- Text-based PDFs only — scanned images have no text to read.
-- Single-column layouts parse most reliably; anything off can be corrected in the review step.

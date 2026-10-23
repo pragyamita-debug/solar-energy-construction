@@ -8,27 +8,24 @@ export interface Links {
 export interface Experience {
   role: string;
   company: string;
-  location?: string;
-  /** Human-readable period, e.g. "Jan 2024 – Present" */
+  /** Shown as written, e.g. "Aug 2024 – Present" */
   period?: string;
-  current: boolean;
-  months: number;
+  /** Current role gets a pulsing dot on the timeline */
+  current?: boolean;
   bullets: string[];
 }
 
 export interface Education {
   degree: string;
-  /** Short label for the stat card, e.g. "M.A." */
+  /** Short label for the stat strip, e.g. "M.A." */
   short: string;
   field?: string;
   institution?: string;
   year?: string;
-  rank: number;
 }
 
 export interface Project {
   title: string;
-  meta?: string;
   description: string;
   tags: string[];
 }
@@ -42,12 +39,15 @@ export interface Goal {
 export interface Resume {
   name: string;
   headline: string;
-  tagline: string;
+  tagline?: string;
   email?: string;
   phone?: string;
   location?: string;
   links: Links;
   summary: string;
+  /** Optional photo for the About section — a URL or a file in /public */
+  photo?: string;
+  motto?: string;
   experience: Experience[];
   education: Education[];
   skills: string[];
@@ -56,21 +56,12 @@ export interface Resume {
   certifications: string[];
   goals: Goal[];
   interests: string[];
-  languages: string[];
-  motto?: string;
   stats: {
     years: number;
-    /** true when the figure should be shown with a trailing "+" */
-    yearsPlus: boolean;
+    /** show "+" after the number */
+    yearsPlus?: boolean;
     projects: number;
-    projectsPlus: boolean;
+    projectsPlus?: boolean;
     skills: number;
   };
-}
-
-export interface StoredProfile {
-  resume: Resume;
-  photo?: string;
-  file?: { name: string; type: string; dataUrl: string };
-  updatedAt: number;
 }

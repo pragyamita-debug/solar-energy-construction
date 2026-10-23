@@ -13,16 +13,9 @@ interface Props {
   name: string;
   email?: string;
   active: string;
-  hasPhoto: boolean;
-  onUploadNew: () => void;
-  onEdit: () => void;
-  onPhoto: () => void;
-  onDownloadCv: () => void;
-  onReset: () => void;
 }
 
-export function NavBar({ name, email, active, hasPhoto, onUploadNew, onEdit, onPhoto, onDownloadCv, onReset }: Props) {
-  const [menu, setMenu] = useState(false);
+export function NavBar({ name, email, active }: Props) {
   const [mobile, setMobile] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const ref = useRef<HTMLElement>(null);
@@ -32,10 +25,7 @@ export function NavBar({ name, email, active, hasPhoto, onUploadNew, onEdit, onP
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     const onDown = (e: PointerEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setMenu(false);
-        setMobile(false);
-      }
+      if (ref.current && !ref.current.contains(e.target as Node)) setMobile(false);
     };
     document.addEventListener('pointerdown', onDown);
     return () => {
@@ -43,14 +33,6 @@ export function NavBar({ name, email, active, hasPhoto, onUploadNew, onEdit, onP
       document.removeEventListener('pointerdown', onDown);
     };
   }, []);
-
-  const actions = [
-    { label: 'Upload a new CV', icon: 'upload' as const, fn: onUploadNew },
-    { label: 'Edit details', icon: 'edit' as const, fn: onEdit },
-    { label: hasPhoto ? 'Change photo' : 'Add a photo', icon: 'camera' as const, fn: onPhoto },
-    { label: 'Download CV', icon: 'download' as const, fn: onDownloadCv },
-    { label: 'Start over', icon: 'refresh' as const, fn: onReset },
-  ];
 
   return (
     <header ref={ref} className={`nav ${scrolled ? 'is-scrolled' : ''}`}>
@@ -71,28 +53,6 @@ export function NavBar({ name, email, active, hasPhoto, onUploadNew, onEdit, onP
         </nav>
 
         <div className="nav__end">
-          <div className="nav__pop">
-            <button className="icon-btn" aria-label="Manage dashboard" aria-expanded={menu} onClick={() => setMenu((m) => !m)}>
-              <Icon name="cog" size={18} />
-            </button>
-            {menu && (
-              <ul className="popover" role="menu">
-                {actions.map((a) => (
-                  <li key={a.label}>
-                    <button
-                      role="menuitem"
-                      onClick={() => {
-                        setMenu(false);
-                        a.fn();
-                      }}
-                    >
-                      <Icon name={a.icon} size={16} /> {a.label}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
           <a className="btn btn--primary btn--sm nav__cta" href={email ? `mailto:${email}` : '#about'}>
             Contact Me <Icon name="arrowRight" size={16} />
           </a>
